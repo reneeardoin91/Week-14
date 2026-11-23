@@ -23,7 +23,7 @@ export async function getAllIds() {
       params: {
         id: item.ID.toString()
       }
-    }
+    };
   });
 }
 
@@ -41,5 +41,10 @@ export async function getSortedList() {
 
 export async function getData(idRequested) {
   const posts = await getPosts();
-  return posts.find(post => post.ID.toString() === idRequested) || {};
+  const post = posts.find(item => item.ID.toString() === idRequested);
+  if (!post) {
+    throw new Error(`Post ${idRequested} was not found.`);
+  }
+
+  return post;
 }
