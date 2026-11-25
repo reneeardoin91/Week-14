@@ -1,15 +1,15 @@
 import Head from 'next/head';
-import Layout from '../components/layout';
-import Date from '../components/date';
-import utilStyles from '../styles/utils.module.css';
-import { getAllIds, getData } from '../lib/posts';
+import Layout from '../../components/layout';
+import { getAllIds, getData } from '../../lib/posts';
 
 export async function getStaticProps({ params }) {
-  const postData = await getData(params.id);
+  const itemData = await getData(params.id);
+
   return {
     props: {
-      postData
+      itemData
     },
+    revalidate: 60 
   };
 }
 
@@ -17,22 +17,19 @@ export async function getStaticPaths() {
   const paths = await getAllIds();
   return {
     paths,
-    fallback: false,
+    fallback: false
   };
 }
 
-export default function Entry({ postData }) {
+export default function Entry({ itemData }) {
   return (
     <Layout>
-      <Head>
-        <title>{postData.post_title}</title>
-      </Head>
-      <article>
-        <h1 className={utilStyles.headingXl}>{postData.post_title}</h1>
-        <div className={utilStyles.lightText}>
-          <Date dateString={postData.post_date.slice(0, 10)} />
+      <article className="card col-6">
+        <div className="card-body">
+          <h5 className="card-title">{itemData.post_title}</h5>
+          <h6 className="card-subtitle mb-2 text-muted">{itemData.acf_fields.first_name}</h6>
+         <div className="card-text" dangerouslySetInnerHTML={createMarkup()} />
         </div>
-        <div dangerouslySetInnerHTML={{ __html: postData.post_content }} />
       </article>
     </Layout>
   );

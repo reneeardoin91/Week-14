@@ -1,8 +1,8 @@
-
+import got from 'got';
 const dataURL = 'https://dev-renee-week14.pantheonsite.io/wp-json/twentytwentyone-child/v1/latest-posts/1';
 
 async function getPosts() {
-  const response = await fetch(dataURL);
+  const response = await got(dataURL);
   if (!response.ok) {
     throw new Error(`Failed to fetch posts: ${response.status} ${response.statusText}`);
   }
